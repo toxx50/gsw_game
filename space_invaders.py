@@ -2,10 +2,9 @@ import pygame
 import os, sys
 import time
 import random
-#import pyglet
-#from training_room import video
-import numpy as np
-import cv2
+from button import Button
+
+
 
 
 pygame.font.init()  # font importing
@@ -30,11 +29,27 @@ BLUE_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_blue.png"))
 YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"))
 
 # BACKGROUND IMAGE
-BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")),
+BG_1 = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background_1.png")),
                             (WIDTH, HEIGHT))  # scaled image with dimensions "WIDTH, HEIGHT"
+BG_2 = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background_2.png")),
+                            (WIDTH, HEIGHT))
+
 
 Menu_BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "main_menu_BG.png")), (WIDTH, HEIGHT))
 
+Opening_BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "opening_bg.png")), (WIDTH, HEIGHT))
+
+HS_BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "HS_BG.png")), (WIDTH, HEIGHT))
+
+
+# main menu screen
+SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Menu")
+
+
+
+def get_font(size): # Font type for main menu
+    return pygame.font.Font("Font/VerminVibes1989.ttf", size)
 
 
 
@@ -183,7 +198,12 @@ def main():
     lost_count = 0
 
     def redraw_window():  # redrawing the screen
-        WIN.blit(BG, (0, 0))  # drawing "BG" picture on 0 coordinate position
+
+
+        if level < 5:     #changing backgrounds for level in the game
+            WIN.blit(BG_1, (0, 0))  # drawing "BG" picture on 0 coordinate position
+        elif level >= 5:
+            WIN.blit(BG_2, (0, 0))
 
         # draw text
         lives_label = main_font.render(f"Lives: {lives}", 1, (255, 255, 255))  # format lives on screen with render
@@ -270,36 +290,87 @@ def main():
         player.move_lasers(-laser_vel, enemies)
 
 
+def score():   #high score
+    while True:
+        SCORE_MOUSE_POS = pygame.mouse.get_pos()
+
+        SCREEN.blit(HS_BG, (0, 0))
+
+        SCORE_TEXT = get_font(45).render("High Score screen COMING SOON", True, "Gold")
+        SCORE_RECT = SCORE_TEXT.get_rect(center=(480, 360))
+        SCREEN.blit(SCORE_TEXT, SCORE_RECT)
+
+        SCORE_BACK = Button(image=None, pos=(480, 460),
+                            text_input="GO BACK", font=get_font(75), base_color="White", hovering_color="Gold")
+
+        SCORE_BACK.changeColor(SCORE_MOUSE_POS)
+        SCORE_BACK.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if SCORE_BACK.checkForInput(SCORE_MOUSE_POS):
+                    main_menu()
+
+        pygame.display.update()
+
 def main_menu():
+    while True:
+        SCREEN.blit(Menu_BG, (0, 0))
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        MENU_TEXT = get_font(90).render("MAIN MENU", True, "#b68f40")
+        MENU_RECT = MENU_TEXT.get_rect(center=(640, 125))
+
+        PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 200),
+                             text_input="PLAY", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
+        SCORE_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 265),
+                              text_input="HIGH SCORE", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
+        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 330),
+                             text_input="QUIT", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
+
+        SCREEN.blit(MENU_TEXT, MENU_RECT)
+
+        for button in [PLAY_BUTTON, SCORE_BUTTON, QUIT_BUTTON]:
+            button.changeColor(MENU_MOUSE_POS)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    main()
+                if SCORE_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    score()
+                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+
+def opening_screen():
     title_font_1 = pygame.font.Font("font/VerminVibes1989.ttf", 70)
     title_font_2 = pygame.font.Font("font/VerminVibes1989.ttf", 70)
     run = True
 
     while run:
-        WIN.blit(Menu_BG, (0, 0))
-        title_label = title_font_1.render("GALAXY SPACE WARS", 1, (255, 255, 255))
-        WIN.blit(title_label, (WIDTH / 2 - title_label.get_width() / 2, 350))
+        WIN.blit(Opening_BG, (0, 0))
 
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                main()
+                main_menu()
 
     pygame.quit()
 
-"""
-def video():
-    cap = cv2.VideoCapture("assets\intro.mp4")
-
-    while (True):
-        ret,frame=cap.read()
-        cv2.imshow("video play",frame)
-        if (cv2.waitKey(60) & 0xFF == ord('g')):
-            continue
-"""
-
-main_menu()
+opening_screen()
 
 

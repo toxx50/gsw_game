@@ -2,5 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/protobuf" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/protobuf/cmake/onnx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/protobuf/cmake/onnx/third_party/benchmark" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/protobuf/cmake/onnx/third_party/pybind11" vcs="Git" />
   </component>
 </project>
