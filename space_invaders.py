@@ -14,8 +14,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))  # surface, window display
 pygame.display.set_caption("Space Shooter Game")  # display game name
 
 # LOAD IMAGES
-RED_SPACE_SHIP = pygame.image.load(
-    os.path.join("assets", "pixel_ship_red_small.png"))  # load image from folder wuth "os.path.join"
+RED_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_red_small.png"))  # load image from folder wuth "os.path.join"
 GREEN_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_green_small.png"))
 BLUE_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_blue_small.png"))
 
@@ -44,7 +43,7 @@ HS_BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "HS_BG.p
 
 # main menu screen
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Menu")
+pygame.display.set_caption("GALAXY SPACE WARS")
 
 
 
